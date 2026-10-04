@@ -1,0 +1,2183 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>ICSE X Buzzer Challenge</title>
+
+<style>
+
+*{
+    box-sizing:border-box;
+    margin:0;
+    padding:0;
+}
+
+body{
+    font-family:Arial, Helvetica, sans-serif;
+    min-height:100vh;
+    padding:20px;
+
+    background:
+    radial-gradient(circle at top left,#312e81,transparent 40%),
+    radial-gradient(circle at bottom right,#0e7490,transparent 40%),
+    linear-gradient(135deg,#020617,#111827);
+
+    color:white;
+
+    display:flex;
+    justify-content:center;
+    align-items:center;
+}
+
+/* MAIN CONTAINER */
+
+.container{
+    width:100%;
+    max-width:1000px;
+
+    background:rgba(255,255,255,.10);
+
+    backdrop-filter:blur(18px);
+
+    border:1px solid rgba(255,255,255,.2);
+
+    border-radius:30px;
+
+    padding:25px;
+
+    box-shadow:
+    0 20px 60px rgba(0,0,0,.6);
+}
+
+/* HEADER */
+
+.header{
+    text-align:center;
+    margin-bottom:20px;
+}
+
+.header h1{
+    font-size:38px;
+    color:#fde047;
+
+    text-shadow:
+    0 0 10px #fde047,
+    0 0 30px #facc15;
+
+    animation:titleGlow 2s infinite alternate;
+}
+
+@keyframes titleGlow{
+
+    from{
+        text-shadow:0 0 10px #fde047;
+    }
+
+    to{
+        text-shadow:
+        0 0 15px #fde047,
+        0 0 40px #facc15;
+    }
+}
+
+.header h2{
+    color:#67e8f9;
+    margin-top:8px;
+}
+
+.header p{
+    margin-top:5px;
+    color:#cbd5e1;
+}
+
+/* SCORE BOARD */
+
+.scoreboard{
+    display:grid;
+    grid-template-columns:repeat(3,1fr);
+    gap:15px;
+    margin:20px 0;
+}
+
+.scorebox{
+    background:
+    linear-gradient(145deg,#111827,#1e293b);
+
+    border:2px solid #38bdf8;
+
+    border-radius:18px;
+
+    padding:15px;
+
+    text-align:center;
+
+    box-shadow:
+    0 0 15px rgba(56,189,248,.2);
+}
+
+.scorebox strong{
+    display:block;
+    color:#94a3b8;
+    font-size:14px;
+}
+
+.scorebox span{
+    display:block;
+
+    margin-top:5px;
+
+    font-size:30px;
+
+    font-weight:bold;
+
+    color:#facc15;
+}
+
+/* QUESTION CARD */
+
+.question-card{
+
+    background:white;
+
+    color:#111827;
+
+    border-radius:25px;
+
+    padding:30px;
+
+    text-align:center;
+
+    box-shadow:
+    0 15px 40px rgba(0,0,0,.5);
+
+    position:relative;
+
+    overflow:hidden;
+}
+
+.question-card::before{
+
+    content:"";
+
+    position:absolute;
+
+    top:0;
+    left:0;
+
+    width:100%;
+    height:7px;
+
+    background:
+    linear-gradient(
+        90deg,
+        #7c3aed,
+        #06b6d4,
+        #22c55e,
+        #facc15,
+        #ef4444
+    );
+}
+
+.question-number{
+
+    color:#7c3aed;
+
+    font-weight:bold;
+
+    font-size:18px;
+
+    margin-bottom:10px;
+}
+
+.question{
+
+    font-size:26px;
+
+    font-weight:bold;
+
+    line-height:1.4;
+
+    margin:15px 0 20px;
+}
+
+/* TIMER */
+
+.timer-text{
+
+    font-size:34px;
+
+    font-weight:bold;
+
+    color:#dc2626;
+
+    margin:10px;
+}
+
+.timer-container{
+
+    width:100%;
+
+    height:20px;
+
+    background:#e5e7eb;
+
+    border-radius:20px;
+
+    overflow:hidden;
+
+    margin-bottom:20px;
+}
+
+.timer{
+
+    height:100%;
+
+    width:100%;
+
+    background:#22c55e;
+
+    border-radius:20px;
+
+    transition:
+    width 1s linear,
+    background .3s;
+}
+
+/* OPTIONS */
+
+.options{
+
+    display:grid;
+
+    grid-template-columns:1fr 1fr;
+
+    gap:15px;
+}
+
+.option{
+
+    padding:18px;
+
+    border:none;
+
+    border-radius:16px;
+
+    font-size:18px;
+
+    font-weight:bold;
+
+    cursor:pointer;
+
+    background:#e0e7ff;
+
+    color:#111827;
+
+    transition:.2s;
+}
+
+.option:hover{
+
+    transform:translateY(-4px);
+
+    background:#c4b5fd;
+
+    box-shadow:
+    0 8px 20px rgba(0,0,0,.2);
+}
+
+.option.correct{
+
+    background:#22c55e !important;
+
+    color:white;
+
+    box-shadow:
+    0 0 25px #22c55e;
+
+    animation:correctPulse .6s infinite alternate;
+}
+
+@keyframes correctPulse{
+
+    from{
+        transform:scale(1);
+    }
+
+    to{
+        transform:scale(1.03);
+    }
+}
+
+.option.wrong{
+
+    background:#ef4444 !important;
+
+    color:white;
+
+    box-shadow:
+    0 0 25px #ef4444;
+
+    animation:shake .3s;
+}
+
+@keyframes shake{
+
+    0%{
+        transform:translateX(0);
+    }
+
+    25%{
+        transform:translateX(-8px);
+    }
+
+    50%{
+        transform:translateX(8px);
+    }
+
+    75%{
+        transform:translateX(-8px);
+    }
+
+    100%{
+        transform:translateX(0);
+    }
+}
+
+/* BUZZER */
+
+.buzzer-area{
+
+    text-align:center;
+
+    margin:25px 0;
+}
+
+#buzzer{
+
+    width:160px;
+    height:160px;
+
+    border-radius:50%;
+
+    border:10px solid #991b1b;
+
+    background:
+    radial-gradient(
+        circle at 35% 30%,
+        #ff8888,
+        #ef4444,
+        #991b1b
+    );
+
+    color:white;
+
+    font-size:25px;
+
+    font-weight:bold;
+
+    cursor:pointer;
+
+    box-shadow:
+    0 10px 30px rgba(0,0,0,.6),
+    0 0 35px rgba(239,68,68,.7);
+
+    transition:.15s;
+}
+
+#buzzer:hover{
+    transform:scale(1.05);
+}
+
+#buzzer:active{
+    transform:scale(.85);
+}
+
+.buzzing{
+
+    animation:
+    buzzerShake .1s infinite alternate;
+}
+
+@keyframes buzzerShake{
+
+    from{
+        transform:rotate(-5deg) scale(1);
+    }
+
+    to{
+        transform:rotate(5deg) scale(1.08);
+    }
+}
+
+.buzzer-area p{
+
+    margin-top:12px;
+
+    color:#cbd5e1;
+
+    font-size:15px;
+}
+
+/* MESSAGE */
+
+#message{
+
+    text-align:center;
+
+    min-height:40px;
+
+    font-size:21px;
+
+    font-weight:bold;
+
+    margin:15px;
+}
+
+/* NEXT BUTTON */
+
+.control{
+
+    text-align:center;
+
+    margin-top:15px;
+}
+
+.control button{
+
+    padding:15px 30px;
+
+    border:none;
+
+    border-radius:14px;
+
+    background:#facc15;
+
+    color:#111827;
+
+    font-size:18px;
+
+    font-weight:bold;
+
+    cursor:pointer;
+
+    transition:.2s;
+}
+
+.control button:hover{
+
+    transform:scale(1.06);
+
+    background:#fde047;
+
+    box-shadow:
+    0 0 20px #facc15;
+}
+
+/* RESULT */
+
+#result{
+
+    display:none;
+
+    text-align:center;
+
+    background:white;
+
+    color:#111827;
+
+    border-radius:25px;
+
+    padding:40px;
+}
+
+#result h1{
+
+    font-size:42px;
+
+    color:#7c3aed;
+
+    margin-bottom:15px;
+}
+
+.final-score{
+
+    font-size:65px;
+
+    font-weight:bold;
+
+    color:#16a34a;
+
+    margin:15px;
+}
+
+.result-info{
+
+    font-size:23px;
+
+    line-height:1.8;
+}
+
+.rank{
+
+    font-size:28px;
+
+    font-weight:bold;
+
+    color:#ea580c;
+
+    margin:20px;
+}
+
+.restart{
+
+    padding:15px 30px;
+
+    border:none;
+
+    border-radius:14px;
+
+    background:#7c3aed;
+
+    color:white;
+
+    font-size:18px;
+
+    font-weight:bold;
+
+    cursor:pointer;
+}
+
+.restart:hover{
+
+    background:#6d28d9;
+
+    transform:scale(1.05);
+}
+
+
+/* =====================================================
+   🌸 FLORAL SHOWER
+===================================================== */
+
+#flowerContainer{
+
+    position:fixed;
+
+    top:0;
+    left:0;
+
+    width:100%;
+    height:100%;
+
+    pointer-events:none;
+
+    overflow:hidden;
+
+    z-index:9999;
+}
+
+
+/* EACH FLOWER */
+
+.flower{
+
+    position:absolute;
+
+    top:-80px;
+
+    font-size:30px;
+
+    animation:
+    flowerFall linear forwards;
+
+    filter:
+    drop-shadow(
+        0 3px 4px rgba(0,0,0,.3)
+    );
+}
+
+@keyframes flowerFall{
+
+    0%{
+
+        transform:
+        translateY(-80px)
+        rotate(0deg)
+        scale(.7);
+
+        opacity:0;
+    }
+
+    10%{
+        opacity:1;
+    }
+
+    50%{
+
+        transform:
+        translateY(50vh)
+        rotate(180deg)
+        scale(1);
+    }
+
+    100%{
+
+        transform:
+        translateY(110vh)
+        rotate(420deg)
+        scale(.8);
+
+        opacity:0;
+    }
+}
+
+
+/* CELEBRATION MESSAGE */
+
+.celebration{
+
+    position:fixed;
+
+    top:35%;
+
+    left:50%;
+
+    transform:
+    translate(-50%,-50%)
+    scale(.5);
+
+    z-index:10000;
+
+    font-size:55px;
+
+    font-weight:bold;
+
+    color:#facc15;
+
+    text-align:center;
+
+    text-shadow:
+    0 0 10px #fff,
+    0 0 25px #f59e0b,
+    0 0 50px #f97316;
+
+    animation:
+    celebrationPop 1.5s forwards;
+
+    pointer-events:none;
+}
+
+@keyframes celebrationPop{
+
+    0%{
+
+        opacity:0;
+
+        transform:
+        translate(-50%,-50%)
+        scale(.2);
+    }
+
+    30%{
+
+        opacity:1;
+
+        transform:
+        translate(-50%,-50%)
+        scale(1.2);
+    }
+
+    60%{
+
+        transform:
+        translate(-50%,-50%)
+        scale(1);
+    }
+
+    100%{
+
+        opacity:0;
+
+        transform:
+        translate(-50%,-50%)
+        scale(1.3);
+    }
+}
+
+
+/* MOBILE */
+
+@media(max-width:650px){
+
+    body{
+        padding:10px;
+    }
+
+    .container{
+        padding:15px;
+    }
+
+    .header h1{
+        font-size:27px;
+    }
+
+    .header h2{
+        font-size:20px;
+    }
+
+    .scoreboard{
+        grid-template-columns:1fr;
+    }
+
+    .question-card{
+        padding:20px;
+    }
+
+    .question{
+        font-size:21px;
+    }
+
+    .options{
+        grid-template-columns:1fr;
+    }
+
+    #buzzer{
+
+        width:135px;
+        height:135px;
+
+        font-size:22px;
+    }
+
+    .celebration{
+        font-size:38px;
+    }
+
+}
+
+</style>
+</head>
+
+
+<body>
+
+
+<!-- 🌸 FLOWER CONTAINER -->
+
+<div id="flowerContainer"></div>
+
+
+<div class="container">
+
+
+    <!-- HEADER -->
+
+    <div class="header">
+
+        <h1>
+            🏆 ICSE X BUZZER CHALLENGE 🏆
+        </h1>
+
+        <h2>
+            Data Values & Identifiers
+        </h2>
+
+        <p>
+            Computer Applications • Class X
+        </p>
+
+    </div>
+
+
+    <!-- SCOREBOARD -->
+
+    <div class="scoreboard">
+
+        <div class="scorebox">
+
+            <strong>
+                🏆 SCORE
+            </strong>
+
+            <span id="score">
+                0
+            </span>
+
+        </div>
+
+
+        <div class="scorebox">
+
+            <strong>
+                ❓ QUESTION
+            </strong>
+
+            <span id="questionCount">
+                1/20
+            </span>
+
+        </div>
+
+
+        <div class="scorebox">
+
+            <strong>
+                ⭐ MARKS
+            </strong>
+
+            <span id="marks">
+                0
+            </span>
+
+        </div>
+
+    </div>
+
+
+    <!-- QUIZ AREA -->
+
+    <div id="quizArea">
+
+
+        <div class="question-card">
+
+
+            <div
+                class="question-number"
+                id="questionNumber">
+
+                QUESTION 1
+
+            </div>
+
+
+            <div
+                class="question"
+                id="question">
+
+                Loading question...
+
+            </div>
+
+
+            <!-- TIMER -->
+
+            <div class="timer-text">
+
+                ⏱️
+                <span id="time">
+                    30
+                </span>
+                seconds
+
+            </div>
+
+
+            <div class="timer-container">
+
+                <div
+                    class="timer"
+                    id="timer">
+                </div>
+
+            </div>
+
+
+            <!-- OPTIONS -->
+
+            <div
+                class="options"
+                id="options">
+            </div>
+
+
+        </div>
+
+
+        <!-- BUZZER -->
+
+        <div class="buzzer-area">
+
+            <button
+                id="buzzer"
+                onclick="pressBuzzer()">
+
+                🔴
+                <br>
+                BUZZ!
+
+            </button>
+
+            <p>
+                Press the buzzer before selecting an answer
+            </p>
+
+        </div>
+
+
+        <!-- MESSAGE -->
+
+        <div id="message"></div>
+
+
+        <!-- NEXT -->
+
+        <div class="control">
+
+            <button
+                id="nextBtn"
+                onclick="nextQuestion()"
+                style="display:none;">
+
+                NEXT QUESTION ➡️
+
+            </button>
+
+        </div>
+
+
+    </div>
+
+
+    <!-- RESULT -->
+
+    <div id="result">
+
+        <h1>
+            🎉 QUIZ COMPLETE! 🎉
+        </h1>
+
+
+        <div class="final-score">
+
+            <span id="finalScore">
+                0
+            </span>
+
+            /
+
+            <span id="totalQuestions">
+                20
+            </span>
+
+        </div>
+
+
+        <div class="result-info">
+
+            <p>
+
+                📊 Marks Obtained:
+
+                <strong>
+
+                    <span id="finalMarks">
+                        0
+                    </span>
+
+                </strong>
+
+            </p>
+
+
+            <p>
+
+                📈 Percentage:
+
+                <strong>
+
+                    <span id="percentage">
+                        0
+                    </span>%
+
+                </strong>
+
+            </p>
+
+        </div>
+
+
+        <div
+            class="rank"
+            id="rank">
+        </div>
+
+
+        <button
+            class="restart"
+            onclick="restartQuiz()">
+
+            🔄 PLAY AGAIN
+
+        </button>
+
+    </div>
+
+
+</div>
+
+
+<script>
+
+
+/* =====================================================
+   QUESTION BANK
+   ICSE CLASS X
+   DATA VALUES AND IDENTIFIERS
+===================================================== */
+
+const questions = [
+
+{
+question:"Which of the following is a valid Java identifier?",
+options:[
+"2student",
+"student_name",
+"class",
+"student-name"
+],
+answer:1
+},
+
+{
+question:"Which of the following is NOT a valid identifier?",
+options:[
+"totalMarks",
+"_value",
+"student1",
+"1student"
+],
+answer:3
+},
+
+{
+question:"Which data type is used to store a single character in Java?",
+options:[
+"String",
+"char",
+"character",
+"letter"
+],
+answer:1
+},
+
+{
+question:"Which data type stores true or false values?",
+options:[
+"boolean",
+"bool",
+"logical",
+"bit"
+],
+answer:0
+},
+
+{
+question:"What is the value of 10 + 5 * 2?",
+options:[
+"30",
+"20",
+"25",
+"15"
+],
+answer:1
+},
+
+{
+question:"Which of these is a Java keyword?",
+options:[
+"student",
+"marks",
+"int",
+"total"
+],
+answer:2
+},
+
+{
+question:"Which is a valid variable declaration?",
+options:[
+"int marks;",
+"marks int;",
+"integer marks;",
+"int = marks;"
+],
+answer:0
+},
+
+{
+question:"Which data type is commonly used for decimal values?",
+options:[
+"int",
+"char",
+"double",
+"boolean"
+],
+answer:2
+},
+
+{
+question:"What is the value of 20 % 6?",
+options:[
+"2",
+"3",
+"4",
+"5"
+],
+answer:0
+},
+
+{
+question:"Which identifier follows Java naming rules?",
+options:[
+"total marks",
+"TotalMarks",
+"123marks",
+"total-marks"
+],
+answer:1
+},
+
+{
+question:"Which of the following is a literal?",
+options:[
+"25",
+"marks",
+"total",
+"student"
+],
+answer:0
+},
+
+{
+question:"Which data type can store whole numbers?",
+options:[
+"double",
+"float",
+"int",
+"char"
+],
+answer:2
+},
+
+{
+question:"Which symbol is used to assign a value to a variable?",
+options:[
+"==",
+"=",
+":=",
+"=>"
+],
+answer:1
+},
+
+{
+question:"What is the value of 15 / 4 when both operands are integers?",
+options:[
+"3",
+"3.75",
+"4",
+"2"
+],
+answer:0
+},
+
+{
+question:"Which is NOT allowed in a Java identifier?",
+options:[
+"underscore",
+"digit after the first character",
+"uppercase letter",
+"space"
+],
+answer:3
+},
+
+{
+question:"Which of the following is a valid character literal?",
+options:[
+"'A'",
+"\"A\"",
+"A",
+"'ABC'"
+],
+answer:0
+},
+
+{
+question:"Which value represents a boolean literal?",
+options:[
+"1",
+"TRUE",
+"true",
+"'true'"
+],
+answer:2
+},
+
+{
+question:"Which identifier is invalid because it is a Java keyword?",
+options:[
+"student",
+"number",
+"class",
+"marks"
+],
+answer:2
+},
+
+{
+question:"What is the value of 17 % 5?",
+options:[
+"2",
+"3",
+"4",
+"5"
+],
+answer:0
+},
+
+{
+question:"Which statement correctly declares an integer variable?",
+options:[
+"integer age;",
+"int age;",
+"age int;",
+"Int age;"
+],
+answer:1
+}
+
+];
+
+
+/* =====================================================
+   GAME VARIABLES
+===================================================== */
+
+let currentQuestion = 0;
+
+let score = 0;
+
+let marks = 0;
+
+let timeLeft = 30;
+
+let timerInterval;
+
+let buzzerPressed = false;
+
+let answered = false;
+
+
+/* =====================================================
+   AUDIO
+===================================================== */
+
+let audioContext;
+
+
+function startAudio(){
+
+    if(!audioContext){
+
+        audioContext =
+        new (
+            window.AudioContext ||
+            window.webkitAudioContext
+        )();
+
+    }
+
+}
+
+
+/* =====================================================
+   SOUND EFFECT
+===================================================== */
+
+function sound(type){
+
+    startAudio();
+
+    const oscillator =
+    audioContext.createOscillator();
+
+    const gain =
+    audioContext.createGain();
+
+
+    oscillator.connect(gain);
+
+    gain.connect(
+        audioContext.destination
+    );
+
+
+    if(type === "correct"){
+
+        oscillator.frequency.value = 750;
+
+    }
+
+    else if(type === "wrong"){
+
+        oscillator.frequency.value = 180;
+
+    }
+
+    else if(type === "tick"){
+
+        oscillator.frequency.value = 600;
+
+    }
+
+
+    gain.gain.setValueAtTime(
+        .3,
+        audioContext.currentTime
+    );
+
+
+    gain.gain.exponentialRampToValueAtTime(
+        .01,
+        audioContext.currentTime + .3
+    );
+
+
+    oscillator.start();
+
+
+    oscillator.stop(
+        audioContext.currentTime + .3
+    );
+
+}
+
+
+/* =====================================================
+   BUZZER SOUND
+===================================================== */
+
+function buzzerSound(){
+
+    startAudio();
+
+    const oscillator =
+    audioContext.createOscillator();
+
+    const gain =
+    audioContext.createGain();
+
+
+    oscillator.type =
+    "sawtooth";
+
+
+    oscillator.frequency.setValueAtTime(
+        120,
+        audioContext.currentTime
+    );
+
+
+    oscillator.frequency.exponentialRampToValueAtTime(
+        70,
+        audioContext.currentTime + .5
+    );
+
+
+    oscillator.connect(gain);
+
+    gain.connect(
+        audioContext.destination
+    );
+
+
+    gain.gain.setValueAtTime(
+        .5,
+        audioContext.currentTime
+    );
+
+
+    gain.gain.exponentialRampToValueAtTime(
+        .01,
+        audioContext.currentTime + .5
+    );
+
+
+    oscillator.start();
+
+
+    oscillator.stop(
+        audioContext.currentTime + .5
+    );
+
+}
+
+
+/* =====================================================
+   🌸 FLORAL SHOWER
+===================================================== */
+
+function floralShower(){
+
+    const container =
+    document.getElementById(
+        "flowerContainer"
+    );
+
+
+    const flowers = [
+
+        "🌸",
+        "🌺",
+        "🌼",
+        "🌻",
+        "🌷",
+        "💐",
+        "🌹",
+        "🪻",
+        "🌿"
+
+    ];
+
+
+    /* Create 70 flowers */
+
+    for(let i=0;i<70;i++){
+
+        const flower =
+        document.createElement("div");
+
+
+        flower.className =
+        "flower";
+
+
+        flower.innerText =
+        flowers[
+            Math.floor(
+                Math.random() *
+                flowers.length
+            )
+        ];
+
+
+        flower.style.left =
+        Math.random() * 100 + "%";
+
+
+        flower.style.fontSize =
+        (20 + Math.random()*30)
+        + "px";
+
+
+        flower.style.animationDuration =
+        (2.5 + Math.random()*3)
+        + "s";
+
+
+        flower.style.animationDelay =
+        (Math.random()*1.2)
+        + "s";
+
+
+        container.appendChild(
+            flower
+        );
+
+
+        setTimeout(()=>{
+
+            flower.remove();
+
+        },6000);
+
+    }
+
+
+    /* Celebration message */
+
+    const celebration =
+    document.createElement("div");
+
+
+    celebration.className =
+    "celebration";
+
+
+    celebration.innerHTML =
+    "🌸 CORRECT! 🌸<br>" +
+    "<span style='font-size:32px'>+1 MARK ⭐</span>";
+
+
+    container.appendChild(
+        celebration
+    );
+
+
+    setTimeout(()=>{
+
+        celebration.remove();
+
+    },1600);
+
+}
+
+
+/* =====================================================
+   LOAD QUESTION
+===================================================== */
+
+function loadQuestion(){
+
+    clearInterval(
+        timerInterval
+    );
+
+
+    buzzerPressed = false;
+
+    answered = false;
+
+    timeLeft = 30;
+
+
+    document.getElementById("time")
+    .innerText = timeLeft;
+
+
+    document.getElementById("timer")
+    .style.width = "100%";
+
+
+    document.getElementById("timer")
+    .style.background =
+    "#22c55e";
+
+
+    document.getElementById("time")
+    .style.color =
+    "#dc2626";
+
+
+    document.getElementById("message")
+    .innerText = "";
+
+
+    document.getElementById("nextBtn")
+    .style.display =
+    "none";
+
+
+    document.getElementById("buzzer")
+    .classList.remove(
+        "buzzing"
+    );
+
+
+    const q =
+    questions[currentQuestion];
+
+
+    document.getElementById(
+        "questionNumber"
+    ).innerText =
+    "QUESTION " +
+    (currentQuestion + 1);
+
+
+    document.getElementById(
+        "question"
+    ).innerText =
+    q.question;
+
+
+    document.getElementById(
+        "questionCount"
+    ).innerText =
+    (currentQuestion + 1)
+    + "/"
+    + questions.length;
+
+
+    const optionArea =
+    document.getElementById(
+        "options"
+    );
+
+
+    optionArea.innerHTML = "";
+
+
+    q.options.forEach(
+    (option,index)=>{
+
+        const button =
+        document.createElement(
+            "button"
+        );
+
+
+        button.className =
+        "option";
+
+
+        button.innerText =
+        String.fromCharCode(
+            65 + index
+        )
+        + ". "
+        + option;
+
+
+        button.onclick =
+        function(){
+
+            if(
+                buzzerPressed &&
+                !answered
+            ){
+
+                checkAnswer(
+                    index
+                );
+
+            }
+
+            else if(
+                !buzzerPressed
+            ){
+
+                document.getElementById(
+                    "message"
+                ).innerText =
+                "🔴 PRESS THE BUZZER FIRST!";
+
+                sound("wrong");
+
+            }
+
+        };
+
+
+        optionArea.appendChild(
+            button
+        );
+
+    });
+
+
+    startTimer();
+
+}
+
+
+/* =====================================================
+   BUZZER
+===================================================== */
+
+function pressBuzzer(){
+
+    if(answered)
+    return;
+
+
+    startAudio();
+
+
+    if(!buzzerPressed){
+
+        buzzerPressed = true;
+
+
+        document.getElementById(
+            "buzzer"
+        ).classList.add(
+            "buzzing"
+        );
+
+
+        document.getElementById(
+            "message"
+        ).innerText =
+        "🔔 BUZZER PRESSED! SELECT YOUR ANSWER!";
+
+
+        buzzerSound();
+
+
+        setTimeout(()=>{
+
+            document.getElementById(
+                "buzzer"
+            ).classList.remove(
+                "buzzing"
+            );
+
+        },700);
+
+    }
+
+}
+
+
+/* =====================================================
+   30 SECOND TIMER
+===================================================== */
+
+function startTimer(){
+
+    clearInterval(
+        timerInterval
+    );
+
+
+    timerInterval =
+    setInterval(()=>{
+
+        timeLeft--;
+
+
+        document.getElementById(
+            "time"
+        ).innerText =
+        timeLeft;
+
+
+        document.getElementById(
+            "timer"
+        ).style.width =
+        (timeLeft / 30 * 100)
+        + "%";
+
+
+        /* 10 SECOND WARNING */
+
+        if(timeLeft <= 10){
+
+            document.getElementById(
+                "timer"
+            ).style.background =
+            "#f97316";
+
+            sound("tick");
+
+        }
+
+
+        /* LAST 5 SECONDS */
+
+        if(timeLeft <= 5){
+
+            document.getElementById(
+                "timer"
+            ).style.background =
+            "#ef4444";
+
+            document.getElementById(
+                "time"
+            ).style.color =
+            "#dc2626";
+
+        }
+
+
+        /* TIME UP */
+
+        if(timeLeft <= 0){
+
+            clearInterval(
+                timerInterval
+            );
+
+            timeOut();
+
+        }
+
+
+    },1000);
+
+}
+
+
+/* =====================================================
+   TIME OUT
+===================================================== */
+
+function timeOut(){
+
+    if(answered)
+    return;
+
+
+    answered = true;
+
+
+    document.getElementById(
+        "message"
+    ).innerText =
+    "⏰ TIME'S UP! NO MARKS!";
+
+
+    sound("wrong");
+
+
+    showCorrectAnswer();
+
+
+    document.getElementById(
+        "nextBtn"
+    ).style.display =
+    "inline-block";
+
+}
+
+
+/* =====================================================
+   CHECK ANSWER
+===================================================== */
+
+function checkAnswer(
+    selected
+){
+
+    if(answered)
+    return;
+
+
+    answered = true;
+
+
+    clearInterval(
+        timerInterval
+    );
+
+
+    const correct =
+    questions[
+        currentQuestion
+    ].answer;
+
+
+    const buttons =
+    document.querySelectorAll(
+        ".option"
+    );
+
+
+    /* CORRECT */
+
+    if(selected === correct){
+
+        score++;
+
+        marks++;
+
+
+        buttons[selected]
+        .classList.add(
+            "correct"
+        );
+
+
+        document.getElementById(
+            "message"
+        ).innerText =
+        "🎉 CORRECT! +1 MARK";
+
+
+        /* 🌸 FLOWER SHOWER */
+
+        floralShower();
+
+
+        /* CORRECT SOUND */
+
+        sound("correct");
+
+    }
+
+
+    /* WRONG */
+
+    else{
+
+        buttons[selected]
+        .classList.add(
+            "wrong"
+        );
+
+
+        buttons[correct]
+        .classList.add(
+            "correct"
+        );
+
+
+        document.getElementById(
+            "message"
+        ).innerText =
+        "❌ WRONG! CORRECT ANSWER IS SHOWN IN GREEN";
+
+
+        sound("wrong");
+
+    }
+
+
+    document.getElementById(
+        "score"
+    ).innerText =
+    score;
+
+
+    document.getElementById(
+        "marks"
+    ).innerText =
+    marks;
+
+
+    document.getElementById(
+        "nextBtn"
+    ).style.display =
+    "inline-block";
+
+}
+
+
+/* =====================================================
+   SHOW CORRECT ANSWER
+===================================================== */
+
+function showCorrectAnswer(){
+
+    const correct =
+    questions[
+        currentQuestion
+    ].answer;
+
+
+    const buttons =
+    document.querySelectorAll(
+        ".option"
+    );
+
+
+    buttons[correct]
+    .classList.add(
+        "correct"
+    );
+
+}
+
+
+/* =====================================================
+   NEXT QUESTION
+===================================================== */
+
+function nextQuestion(){
+
+    currentQuestion++;
+
+
+    if(
+        currentQuestion >=
+        questions.length
+    ){
+
+        finishQuiz();
+
+    }
+
+    else{
+
+        loadQuestion();
+
+    }
+
+}
+
+
+/* =====================================================
+   FINISH QUIZ
+===================================================== */
+
+function finishQuiz(){
+
+    clearInterval(
+        timerInterval
+    );
+
+
+    document.getElementById(
+        "quizArea"
+    ).style.display =
+    "none";
+
+
+    document.querySelector(
+        ".scoreboard"
+    ).style.display =
+    "none";
+
+
+    document.getElementById(
+        "result"
+    ).style.display =
+    "block";
+
+
+    document.getElementById(
+        "finalScore"
+    ).innerText =
+    score;
+
+
+    document.getElementById(
+        "totalQuestions"
+    ).innerText =
+    questions.length;
+
+
+    document.getElementById(
+        "finalMarks"
+    ).innerText =
+    marks;
+
+
+    const percentage =
+    Math.round(
+        score /
+        questions.length *
+        100
+    );
+
+
+    document.getElementById(
+        "percentage"
+    ).innerText =
+    percentage;
+
+
+    let rank;
+
+
+    if(percentage >= 90){
+
+        rank =
+        "🏆 COMPUTER CHAMPION! EXCELLENT! 🌸";
+
+    }
+
+    else if(percentage >= 75){
+
+        rank =
+        "🥇 OUTSTANDING! GREAT JOB! 🌺";
+
+    }
+
+    else if(percentage >= 60){
+
+        rank =
+        "🥈 VERY GOOD! KEEP IT UP! 🌼";
+
+    }
+
+    else if(percentage >= 40){
+
+        rank =
+        "👍 GOOD EFFORT! KEEP PRACTISING! 🌷";
+
+    }
+
+    else{
+
+        rank =
+        "📚 KEEP LEARNING! YOU CAN DO IT! 🌻";
+
+    }
+
+
+    document.getElementById(
+        "rank"
+    ).innerText =
+    rank;
+
+
+    /* FINAL CELEBRATION */
+
+    if(percentage >= 75){
+
+        setTimeout(
+            floralShower,
+            300
+        );
+
+    }
+
+}
+
+
+/* =====================================================
+   RESTART
+===================================================== */
+
+function restartQuiz(){
+
+    currentQuestion = 0;
+
+    score = 0;
+
+    marks = 0;
+
+
+    document.getElementById(
+        "score"
+    ).innerText =
+    "0";
+
+
+    document.getElementById(
+        "marks"
+    ).innerText =
+    "0";
+
+
+    document.getElementById(
+        "quizArea"
+    ).style.display =
+    "block";
+
+
+    document.querySelector(
+        ".scoreboard"
+    ).style.display =
+    "grid";
+
+
+    document.getElementById(
+        "result"
+    ).style.display =
+    "none";
+
+
+    loadQuestion();
+
+}
+
+
+/* =====================================================
+   START GAME
+===================================================== */
+
+loadQuestion();
+
+</script>
+
+</body>
+</html>
+```
